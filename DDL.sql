@@ -2,7 +2,7 @@ DROP DATABASE bookstore;
 CREATE DATABASE bookstore; 
 USE bookstore; 
 
-create table Checkout_Basket
+create table Basket
 (Basket_ID		varchar(8),
 primary key (Basket_ID)
 ); 
@@ -11,7 +11,7 @@ primary key (Basket_ID)
  Store_Name  varchar(20), 
  Address     varchar(40), 
  Email       varchar(30), 
- Number      varchar(20), 
+ Number      varchar(12), 
  primary key (ID) 
  ); 
  
@@ -20,7 +20,7 @@ primary key (Basket_ID)
  Publisher_Name varchar(30), 
  Address   varchar(40), 
  Email     varchar(30), 
- Number   varchar(20), 
+ Number   varchar(12), 
  primary key (Publisher_ID) 
  ); 
  
@@ -31,10 +31,11 @@ primary key (Basket_ID)
  Genre     varchar(20), 
  Author_Name  varchar(30),
  Selling_Price  numeric(4,2), 
- Publisher_Percentage int, 
- Series_Code int, 
+ Publisher_Percentage numeric(2), 
+ Series_Code varchar(8), 
  primary key (ISBN), 
  foreign key (Publisher_ID) references Publisher(Publisher_ID)
+	on delete set null
  ); 
  
 create table Users 
@@ -46,7 +47,7 @@ User_Password		 varchar(30),
 Billing_Address      varchar(40),
 Shipping_Address     varchar(40), 
 primary key	(ID), 
-foreign key (Basket_ID) references Checkout_Basket(Basket_ID)
+foreign key (Basket_ID) references Basket(Basket_ID)
 ); 
 
 create table Orders 
@@ -88,7 +89,7 @@ create table Book_Orders
  ISBN  varchar(8), 
  Amount numeric(3), 
  primary key (Basket_ID, ISBN), 
- foreign key(Basket_ID) references Checkout_Basket(Basket_ID), 
+ foreign key(Basket_ID) references Basket(Basket_ID), 
  foreign key(ISBN) references Book(ISBN) on delete cascade 
  ); 
  
