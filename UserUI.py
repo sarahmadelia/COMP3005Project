@@ -24,8 +24,12 @@ def showUI(window, controller: Controller):
     #          "mike", "nancy", "oliver", "paul", "quinn", "richard", "sarah", "tim", "will", "xavier", "yvonne", "zach"]
 
     lb1 = Listbox(window, height=25, width=60)
-    names = controller.get_book_names()
+
+    # grabs the names of all the bookstores from the sql database
+    names = controller.get_bookstore_names()
+    # inputs all the names at the end of listbox
     lb1.insert(END, *names)
+
     lb1.grid(column=0, row=2, columnspan=2)
 
     order_lbl = Label(window, text='Order history')

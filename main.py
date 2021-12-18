@@ -1,5 +1,4 @@
 import data
-# import practiceUI
 import InitialUI
 from tkinter import *
 import UserUI
@@ -13,7 +12,6 @@ class Controller:
         InitialUI.showUI(self.window, self)
 
     def print_test(self):
-        # print(data.sql_execute_command(self.connector, "SELECT * FROM BookStore"))
         self.clear_frame()
 
     def show_login(self):
@@ -29,14 +27,16 @@ class Controller:
         OwnerUI.showUI(self.window, self)
 
     def clear_frame(self):
-        # frame = Frame(self.window)
-        # for widget in frame.winfo_children():
-        #     widget.destroy()
         new_window = Tk()
         self.window.destroy()
         self.window = new_window
 
-    def get_book_names(self):
+    def get_bookstore_names(self):
+        """Returns a list containing the names of all the bookstores
+
+        Returns:
+            list: list of bookstores
+        """
         result = data.sql_execute_command(
             self.connector, "SELECT Store_Name FROM BookStore")
         return [res[0] for res in result]
@@ -44,11 +44,6 @@ class Controller:
 
 def main():
     Controller()
-    # connector = data.getConnector()
-    # results = data.sql_execute_command(connector, "SELECT * FROM BookStore")
-    # print(results)
-    # window = Tk()
-    # InitialUI.showUI(window)
 
 
 if __name__ == "__main__":

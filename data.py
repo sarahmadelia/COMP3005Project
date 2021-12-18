@@ -24,41 +24,9 @@ def sql_execute_command(connector: mysql.connector, query: str) -> list:
         query (str): Query to be executed
 
     Returns:
-        list: Restults of the query
+        list: Results of the query
     """
     mycursor = connector.cursor()
     mycursor.execute(query)
 
     return mycursor.fetchall()
-
-
-# def print_all_data(connector: mysql.connector):
-#     """Descr
-
-#     Args:
-#         connector (mysql.connector): connection to the database
-#     """
-#     mycursor = connector.cursor()
-#     mycursor.execute("SELECT * FROM BookStore")
-
-#     myresult = mycursor.fetchall()
-#     for x in myresult:
-#         print(x[0], x[1])
-
-    myresult = mycursor.fetchall()
-    for x in myresult:
-        print(x[0], x[1])
-
-# l = sql_execute_command(getConnector(), "SELECT * FROM BookStore")
-
-# for i in l:
-#     print(i)
-# mycursor.execute(
-#     "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
-# mycursor = mydb.cursor()
-
-# sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
-# val = ("John", "Highway 21")
-# mycursor.execute(sql, val)
-
-# mydb.commit()
