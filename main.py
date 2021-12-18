@@ -36,6 +36,11 @@ class Controller:
         self.window.destroy()
         self.window = new_window
 
+    def get_book_names(self):
+        result = data.sql_execute_command(
+            self.connector, "SELECT Store_Name FROM BookStore")
+        return [res[0] for res in result]
+
 
 def main():
     Controller()

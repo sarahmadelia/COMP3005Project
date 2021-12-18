@@ -8,14 +8,12 @@ def getConnector() -> mysql.connector:
     """Description
     Returns a sql connection object
     """
-
-    connector = mysql.connector.connect(
+    return mysql.connector.connect(
         host="localhost",
         user="root",
         password="Renard",
         database="bookstore"
     )
-    return connector
 
 
 def sql_execute_command(connector: mysql.connector, query: str) -> list:
@@ -28,7 +26,6 @@ def sql_execute_command(connector: mysql.connector, query: str) -> list:
     Returns:
         list: Restults of the query
     """
-
     mycursor = connector.cursor()
     mycursor.execute(query)
 
@@ -48,6 +45,9 @@ def sql_execute_command(connector: mysql.connector, query: str) -> list:
 #     for x in myresult:
 #         print(x[0], x[1])
 
+    myresult = mycursor.fetchall()
+    for x in myresult:
+        print(x[0], x[1])
 
 # l = sql_execute_command(getConnector(), "SELECT * FROM BookStore")
 

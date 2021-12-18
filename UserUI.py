@@ -11,6 +11,7 @@ HEIGHT = 700
 def showUI(window, controller: Controller):
     def print_text():
         controller.print_test()
+        # this prints the content of the search entry box
         print(search_entry.get())
 
     search_lbl = Label(window, text='Search')
@@ -19,16 +20,11 @@ def showUI(window, controller: Controller):
     search_entry = Entry(window, width=50)
     search_entry.grid(column=1, row=1)
 
-    names = ["alex", "bob", "carl", "dave", "ed", "frank", "george", "harry", "ian", "james", "kate", "lisa",
-             "mike", "nancy", "oliver", "paul", "quinn", "richard", "sarah", "tim", "will", "xavier", "yvonne", "zach"]
-    # names = data.sql_execute_command(
-    #     data.getConnector(), "SELECT * FROM BookStore")
+    # names = ["alex", "bob", "carl", "dave", "ed", "frank", "george", "harry", "ian", "james", "kate", "lisa",
+    #          "mike", "nancy", "oliver", "paul", "quinn", "richard", "sarah", "tim", "will", "xavier", "yvonne", "zach"]
 
-    # new_list = []
-    # for x in names:
-    #     new_list.append(x[1])
-    # names = new_list
     lb1 = Listbox(window, height=25, width=60)
+    names = controller.get_book_names()
     lb1.insert(END, *names)
     lb1.grid(column=0, row=2, columnspan=2)
 

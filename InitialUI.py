@@ -6,7 +6,7 @@ WIDTH = 1200
 HEIGHT = 700
 
 
-def showUI(window, cont):
+def showUI(window, controller):
 
     # # Create label
     # l = Label(root, text="Bookstore User")
@@ -42,7 +42,7 @@ def showUI(window, cont):
     user_password = Label(window, text="Password").place(x=40, y=100)
 
     submit_button = Button(window, text="Sign In",
-                           command=cont.show_User).place(x=40, y=130)
+                           command=controller.show_User).place(x=40, y=130)
 
     user_name_input_area = Entry(window, width=30).place(x=110, y=60)
 
