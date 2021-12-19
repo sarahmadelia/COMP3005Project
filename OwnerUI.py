@@ -118,6 +118,9 @@ def showUI(window, controller):
     yr_fr_entry = Entry(window, width=20)
     yr_fr_entry.grid(column=4, row=3)
 
+    to_lbl = Label(window, text="To: ")
+    to_lbl.grid(column=5, row=1)
+
     month_to = Label(window, text="Month: ")
     month_to.grid(column=5, row=2)
 
