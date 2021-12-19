@@ -2,7 +2,6 @@
 Acts as the controller 
 main.py creates the connector and initializes a window for the user interfaces 
 to appear on and sets the initial user interface 
-
 """
 import data
 import InitialUI
