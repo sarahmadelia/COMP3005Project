@@ -5,7 +5,7 @@ import data
 #from main import Controller
 
 WIDTH = 1200
-HEIGHT = 700
+HEIGHT = 1000
 
 
 def showUI(window, controller):
@@ -42,14 +42,62 @@ def showUI(window, controller):
     addnewBook = Button(window, text="Add New book")
     addnewBook.grid(column=0, row=4)
 
+    title_entry = Entry(window, width=20)
+    title_entry.grid(column=0, row=5)
+    title_entry.insert(0, "Title")
+
+    author_entry = Entry(window, width=20)
+    author_entry.grid(column=0, row=6)
+    author_entry.insert(0, "Author")
+
+    genre_entry = Entry(window, width=20)
+    genre_entry.grid(column=0, row=7)
+    genre_entry.insert(0, "Genre")
+
+    amount_entry = Entry(window, width=20)
+    amount_entry.grid(column=0, row=8)
+    amount_entry.insert(0, "Amount")
+
+    publisher_entry = Entry(window, width=20)
+    publisher_entry.grid(column=0, row=9)
+    publisher_entry.insert(0, "Publisher")
+
+    percent_entry = Entry(window, width=20)
+    percent_entry.grid(column=0, row=10)
+    percent_entry.insert(0, "Publisher's Percent")
+
+    code_entry = Entry(window, width=20)
+    code_entry.grid(column=0, row=11)
+    code_entry.insert(0, "Series Code")
+
     addBook = Button(window, text="Add book")
     addBook.grid(column=1, row=4)
+
+    add_entry = Entry(window, width=20)
+    add_entry.grid(column=1, row=5)
+    add_entry.insert(0, "ISBN")
+
+    add_entry2 = Entry(window, width=20)
+    add_entry2.grid(column=1, row=6)
+    add_entry2.insert(0, "Amount")
 
     removeBook = Button(window, text="Remove book")
     removeBook.grid(column=2, row=4)
 
+    rem_entry = Entry(window, width=19)
+    rem_entry.grid(column=2, row=5)
+    rem_entry.insert(0, "Amount")
+
     increase = Button(window, text="Increase")
     increase.grid(column=3, row=4)
+
+    inc_entry = Entry(window, width=20)
+    inc_entry.grid(column=3, row=5)
+    inc_entry.insert(0, "ISBN")
+
+    inc_entry2 = Entry(window, width=20)
+    inc_entry2.grid(column=3, row=6)
+    inc_entry2.insert(0, "Amount")
 
     """ Generate Report"""
     report = Label(window, text="Request Report:")
