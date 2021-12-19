@@ -7,71 +7,60 @@ HEIGHT = 700
 
 
 def showUI(window, controller):
+    """ User Sign-In lets the user sign in with ID and password"""
+    display_message1 = Label(
+        window, text="Are you a returning user? Please sign in here! ").place(x=40, y=40)
 
-    # # Create label
-    # l = Label(root, text="Bookstore User")
-    # l.config(font=("Courier", 14))
+    user_ID = Label(window, text="User ID").place(x=40, y=60)
+    user_ID_entry_area = Entry(window, width=30).place(x=110, y=60)
 
-    # ll = tk.Label(window, text='lower left')
-
-    # lr = tk.Label(window, text='lower right')
-    # ##ll.place(x=0, y=250, anchor='sw')
-    # ##lr.place(x=1000, y=250, anchor='se')
-    # ll.place(relx=0.0, rely=1.0, anchor='sw')
-    # lr.place(relx=1.0, rely=1.0, anchor='se')
-
-    # buttonSI = tk.Button(window, text="Sign In")
-    # buttonSI.pack(side='left', ipadx=50, padx=50)
-
-    # userID_lbl = Label(window, text='userID')
-    # userID_lbl.grid(column=0, row=0)
-
-    # passwd_lbl = Label(window, text='password')
-    # passwd_lbl.grid(column=0, row=1)
-
-    # userID_entry = Entry(window, width=50)
-    # userID_entry.grid(column=1, row=0)
-
-    # passwd_entry = Entry(window, width=50)
-    # passwd_entry.grid(column=1, row=1)
-
-    # the label for user_name
-    user_name = Label(window, text="Username").place(x=40, y=60)
-
-    # the label for user_password
     user_password = Label(window, text="Password").place(x=40, y=100)
-
-    submit_button = Button(window, text="Sign In",
-                           command=controller.show_User).place(x=40, y=130)
-
-    user_name_input_area = Entry(window, width=30).place(x=110, y=60)
-
     user_password_entry_area = Entry(window, width=30).place(x=110, y=100)
 
-    # buttonE = tk.Button(window, text="East")
-    # buttonE.pack(side='right', ipadx=20, padx=30)
+    signin_button = Button(window, text="Sign In",
+                           command=controller.show_User).place(x=40, y=130)
 
-    # buttonS = tk.Button(window, text="   ")
-    # buttonS.pack(side='bottom', ipadx=20, padx=30)
+    """User Sign-Up lets the user sign up with their username, email, password, Billing Address and Shipping Address"""
+    display_message2 = Label(
+        window, text="Are you a new user? Please sign up here!"). place(x=40, y=200)
 
-    # T = Text(window, height=5, width=52)
+    new_user_name = Label(window, text="User Name").place(x=40, y=250)
+    new_user_ID_entry_area = Entry(window, width=30).place(x=150, y=250)
 
-    # # Create label
-    # l = Label(window, text="Fact of the Day")
-    # l.config(font=("Courier", 14))
-    # l.pack(side=LEFT)
-    # T.pack(side=LEFT)
-    # B = tk.Button(window, text="Hello", command=print_text)
-    # B.pack()
+    new_user_password = Label(window, text="Password").place(x=40, y=300)
+    new_user_password_entry_area = Entry(window, width=30).place(x=150, y=300)
 
-    window.title("LOGIN")
+    new_user_email = Label(window, text="Email").place(x=40, y=350)
+    new_user_email_entry = Entry(window, width=40). place(x=150, y=350)
+
+    new_user_shipping = Label(
+        window, text="Shipping Address").place(x=40, y=400)
+    new_user_shipping_entry = Entry(window, width=40). place(x=150, y=400)
+
+    new_user_billing = Label(window, text="Billing Address").place(x=40, y=450)
+    new_user_billing_entry = Entry(window, width=40). place(x=150, y=450)
+
+    signup_button = Button(window, text="Sign Up",
+                           command=controller.show_User).place(x=40, y=520)
+
+    """ Bookstore owner sign in section """
+
+    display_message3 = Label(
+        window, text="Are you a bookstore owner? Sign in here! ").place(x=700, y=40)
+
+    owner_ID = Label(window, text="User ID").place(x=700, y=60)
+    owner_ID_entry_area = Entry(window, width=30).place(x=810, y=60)
+
+    owner_password = Label(window, text="Password").place(x=700, y=100)
+    owner_password_entry_area = Entry(window, width=30).place(x=810, y=100)
+
+    signin_button = Button(window, text="Sign In",
+                           command=controller.show_Owner).place(x=700, y=130)
+
+    window.title("LOGIN PAGE")
     window.geometry(f"{WIDTH}x{HEIGHT}+10+10")
     window.mainloop()
-#
 
 
 def print_text():
     print("JESLA")
-
-
-# showUI(Tk())

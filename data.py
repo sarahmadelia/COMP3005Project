@@ -1,12 +1,16 @@
-# data.py interfaces with the back-end of the application to
-# retrieve date from the relational database and access the wirrten SQL queries and functions.
+""" 
+Acts as the model 
+data.py interfaces with the back-end of the application to retrieve data from the 
+relational database and access the written SQL queries and functions. 
+"""
 
 import mysql.connector
 
 
 def getConnector() -> mysql.connector:
-    """Description
-    Returns a sql connection object
+    """Initializes the connector between MySQL and the user interfaces 
+    Returns:
+        mysql.connector: SQL Connection Object 
     """
     return mysql.connector.connect(
         host="localhost",
@@ -17,8 +21,7 @@ def getConnector() -> mysql.connector:
 
 
 def sql_execute_command(connector: mysql.connector, query: str) -> list:
-    """Function that given a connector and query returns the result
-
+    """Function that is passed the connector and query and returns the result of the query
     Args:
         connector (mysql.connector): connector to the SQL database
         query (str): Query to be executed
