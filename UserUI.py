@@ -22,7 +22,8 @@ def showUI(window, controller: Controller):
     search_entry = Entry(window, width=50)
     search_entry.grid(column=1, row=0)
 
-    search_button = Button(window, text="Search").grid(column=2, row=0)
+    search_button = Button(window, text="Search")
+    search_button.grid(column=2, row=0)
 
     """Search Results"""
 
@@ -37,10 +38,8 @@ def showUI(window, controller: Controller):
 
     """Order History Display"""
 
-    #order_lbl = Label(window, text='Order history')
-    #order_lbl.grid(column=0, row=4)
-
-    order_lbl = Label(window, text='Order history').grid(column=0, row=3)
+    order_lbl = Label(window, text='Order history')
+    order_lbl.grid(column=0, row=3)
 
     order_lbx = Listbox(window, width=80, height=5)
     order_lbx.grid(column=0, row=4, columnspan=4)
@@ -52,34 +51,36 @@ def showUI(window, controller: Controller):
     basket_lbx = Listbox(window, width=80, height=20)
     basket_lbx.grid(column=4, row=2, columnspan=2)
 
-    # amountadd_label = Label(window, text="Amount".grid(column=4, row=0))
-    # amountadd_entry = Entry(window, width=10).grid(column=5, row=0)
-
-    # amountrm_label = Label(window, text="Amount").grid(column=4, row=1)
-    # amountrm_entry = Entry(window, width=10).grid(column=5, row=1)
-
     add_btn = Button(window, text='Add to basket')
     add_btn.grid(column=5, row=0)
-    add_entry = Entry(window, width=50).grid(column=4, row=0)
+    add_entry = Entry(window, width=50)
+    add_entry.grid(column=4, row=0)
 
     remove_btn = Button(window, text='Remove from basket', command=print_text)
     remove_btn.grid(column=5, row=1)
 
     amount_entry = ttk.Combobox(
-        window, values=[str(i) for i in range(1, 10)]).grid(column=4, row=1)
+        window, values=[str(i) for i in range(1, 10)])
+    amount_entry.grid(column=4, row=1)
 
-    add_label = Label(window, text="ISBN :").grid(column=3, row=0)
-    amount_label = Label(window, text="Amount :").grid(column=3, row=1)
+    add_label = Label(window, text="ISBN :")
+    add_label.grid(column=3, row=0)
+    amount_label = Label(window, text="Amount :")
+    amount_label.grid(column=3, row=1)
 
-    filler1 = Label(window, text="         "). grid(column=3, row=4)
+    filler1 = Label(window, text="     ")
+    filler1. grid(column=3, row=4)
 
     buy_btn = Button(window, text='    Buy   ')
-    buy_btn.grid(column=5, row=4)
+    buy_btn.grid(column=5, row=3)
 
     search_label = Label(
-        window, text="Search by Tracking Number: "). grid(column=0, row=5)
-    search_entry = Entry(window, width=50).grid(column=1, row=5)
-    search_button = Button(window, text="Track").grid(column=2, row=5)
+        window, text="Search by Tracking Number: ")
+    search_label. grid(column=0, row=5)
+    search_entry = Entry(window, width=50)
+    search_entry.grid(column=1, row=5)
+    search_button = Button(window, text="Track")
+    search_button.grid(column=2, row=5)
 
     """WINDOW INIT."""
 

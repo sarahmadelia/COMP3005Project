@@ -68,6 +68,17 @@ class Controller:
             self.connector, "SELECT ISBN, Title FROM Book")
         return [res[0]+"    "+res[1] for res in result]
 
+    def get_bank_transfers(self):
+        """Returns a list of ID and amount of bank transfers
+
+        Returns:
+            list: list
+        """
+
+        result = data.sql_execute_command(
+            self.connector, "SELECT ID, Publisher_ID, Amount FROM banktransfers")
+        return [res[0]+"    "+res[1] + "  "+res[2] for res in result]
+
 
 def main():
     Controller()
