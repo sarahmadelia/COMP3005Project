@@ -306,7 +306,7 @@ def addToPubBank(bankId,publisherId,referenceNo):
 
 def addToBookBank(storeId,bankId,referenceNo,amount,month,year):
     try:
-        mycursor.execute("insert into BankTransfers values ('%s', '%s', '%s' ,%d ,%d ,%d) ;" % (storeId,bankId,referenceNo,amount,month,year))
+        mycursor.execute("insert into Bookstore_Bank values ('%s', '%s', '%s' ,%d ,%d ,%d) ;" % (storeId,bankId,referenceNo,amount,month,year))
         mydb.commit()
         print("added tuple to bank transfer")
     except Exception as e:
