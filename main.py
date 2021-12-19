@@ -7,7 +7,7 @@ import OwnerUI
 
 class Controller:
     def __init__(self) -> None:
-        self.connector = data.getConnector()
+        # self.connector = data.getConnector()
         self.window = Tk()
         InitialUI.showUI(self.window, self)
 
@@ -40,6 +40,12 @@ class Controller:
         result = data.sql_execute_command(
             self.connector, "SELECT Store_Name FROM BookStore")
         return [res[0] for res in result]
+
+    def user_login(self, email, password):
+        signin_info = data.signInFunc(email, password)
+        if signin_info is None:
+            return
+        self.show_User()
 
 
 def main():
