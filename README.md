@@ -49,3 +49,6 @@ Format of GUI results
 Search results are formatted as : (ISBN, book title, author , genre, price, amount left in inventory, Publisher id)
 Basket results are formatted as: (ISBN, publisher id, book title , amount in basket, price , genre, author)
 order history results are formatted as :(ID, Order number, tracking id, book title, amount , price , address month year)
+
+
+ps. note that the code is functional, the book inventory amount increases and reduces with user actions, order history updates itself after every puchase, bank transfers update aswell...
