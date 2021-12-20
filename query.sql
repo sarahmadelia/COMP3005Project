@@ -58,3 +58,10 @@ where Book_Basket.Basket_ID = "BA-10000"
 select * 
 from Book join Book_Bookstore on (Book.ISBN = Book_Bookstore.ISBN)
 where Book.Title like "%H%"
+------------------------------------------
+select Bookstore_Bank.Reference_no, Publisher_ID, month,year,amount,Bookstore_Bank.Bank_ID from 
+Bookstore_Bank join Publisher_Bank on (Bookstore_Bank.Reference_no = Publisher_Bank.Reference_no)
+---------------------------------------------------------------------------------------------
+select count(*)
+from Book_Bookstore join Book on Book.ISBN = Book_Bookstore.ISBN
+where Title = "Harry potter new world" and Author_name = "J.K.Bowling" and Publisher_ID = "PB-10000"

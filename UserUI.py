@@ -5,34 +5,67 @@ import data
 from main import Controller
 
 WIDTH = 2000
-HEIGHT = 700
+HEIGHT = 1500
 
 
 def showUI(window, controller: Controller):
-    def print_text():
-        controller.print_test()
-        # this prints the content of the search entry box
-        print(search_entry.get())
+
+    def user_search():
+        result = controller.user_Search(search1_entry.get())
+        #clear box
+        lb1.delete(0,END)
+        lb1.insert(END,*result)
+
+    def user_logout():
+            controller.logout()
+    def user_addBasket():
+        controller.userAddBasket(add_entry.get(),
+                                amount_entry.get())
+        basket_lbx.delete(0,END)
+        basket = controller.fillBasket()
+        basket_lbx.insert(END, *basket)
+        
+
+    def user_removeBasket():
+        controller.userRemoveBasket(add_entry.get())
+        basket_lbx.delete(0,END)
+        basket = controller.fillBasket()
+        basket_lbx.insert(END, *basket)
+    
+    def user_buy():
+        controller.userBuy(ship.get(),
+                            bill.get())
+        lb1.delete(0,END)                    
+        intialList = controller.showInventory()
+        lb1.insert(END, *intialList)
+
+        order_lbx.delete(0,END)
+        history = controller.fillOrderHistory()
+        order_lbx.insert(END, *history)
+        
+        basket_lbx.delete(0,END)
+        basket = controller.fillBasket()
+        basket_lbx.insert(END, *basket)
 
     """Search Books"""
 
-    search_lbl = Label(window, text='Search')
-    search_lbl.grid(column=0, row=0)
+    welcome_lbl = Label(window, text="Welcome User    :"+controller.activeUser[2])
+    welcome_lbl.grid(column=0, row=0)
 
-    search_entry = Entry(window, width=50)
-    search_entry.grid(column=1, row=0)
+    search1_entry = Entry(window, width=50)
+    search1_entry.grid(column=1, row=0)
 
-    search_button = Button(window, text="Search")
-    search_button.grid(column=2, row=0)
+    track_button = Button(window, text="Search", command= user_search)
+    track_button.grid(column=2, row=0)
 
     """Search Results"""
 
-    lb1 = Listbox(window, height=25, width=60)
+    lb1 = Listbox(window, height=25, width=150)
 
     # grabs the names of all the bookstores from the sql database
-    names = controller.get_bookstore_names()
+    intialList = controller.showInventory()
     # inputs all the names at the end of listbox
-    lb1.insert(END, *names)
+    lb1.insert(END, *intialList)
 
     lb1.grid(column=0, row=2, columnspan=2)
 
@@ -41,22 +74,42 @@ def showUI(window, controller: Controller):
     order_lbl = Label(window, text='Order history')
     order_lbl.grid(column=0, row=3)
 
-    order_lbx = Listbox(window, width=80, height=5)
+    order_lbx = Listbox(window, width=150, height=20)
     order_lbx.grid(column=0, row=4, columnspan=4)
+    history = controller.fillOrderHistory()
+    order_lbx.insert(END, *history)
 
+    #shipping and billing
+    
+    ship = Entry(window, width=50)
+    ship.grid(column=5, row=4)
+    ship.insert(0,"enter shipping address")
+
+    bill = Entry(window, width=50)
+    bill.grid(column=5, row=5)
+    bill.insert(0,"enter billing address")
+
+    """Log out """
+    logout = Button(window, text="   Logout   ", command=user_logout)
+    logout.grid(column=6, row=0,)
     """Display Basket= Add items, remove items, buy items"""
 
-    basket_lbl = Label(window, text='Basket').grid(column=3, row=2)
+    basket_lbl = Label(window, text='Basket')
+    basket_lbl.grid(column=3, row=2)
 
-    basket_lbx = Listbox(window, width=80, height=20)
+
+    basket_lbx = Listbox(window, width=110, height=20)
     basket_lbx.grid(column=4, row=2, columnspan=2)
 
-    add_btn = Button(window, text='Add to basket')
+    basket = controller.fillBasket()
+    basket_lbx.insert(END, *basket)
+
+    add_btn = Button(window, text='Add to basket', command=user_addBasket)
     add_btn.grid(column=5, row=0)
     add_entry = Entry(window, width=50)
     add_entry.grid(column=4, row=0)
 
-    remove_btn = Button(window, text='Remove from basket', command=print_text)
+    remove_btn = Button(window, text='Remove from basket', command=user_removeBasket)
     remove_btn.grid(column=5, row=1)
 
     amount_entry = ttk.Combobox(
@@ -68,19 +121,24 @@ def showUI(window, controller: Controller):
     amount_label = Label(window, text="Amount :")
     amount_label.grid(column=3, row=1)
 
-    filler1 = Label(window, text="     ")
+    filler1 = Label(window, text= "   ")
     filler1. grid(column=3, row=4)
 
-    buy_btn = Button(window, text='    Buy   ')
+    buy_btn = Button(window, text='    Buy   ', command=user_buy)
     buy_btn.grid(column=5, row=3)
 
-    search_label = Label(
+    #
+    #Tracking
+    # 
+    track_label = Label(
         window, text="Search by Tracking Number: ")
-    search_label. grid(column=0, row=5)
-    search_entry = Entry(window, width=50)
-    search_entry.grid(column=1, row=5)
-    search_button = Button(window, text="Track")
-    search_button.grid(column=2, row=5)
+    track_label. grid(column=0, row=5)
+    track_entry = Entry(window, width=50)
+    track_entry.grid(column=1, row=5)
+    track_button = Button(window, text="Track")
+    track_button.grid(column=2, row=5)
+
+    #welcome user
 
     """WINDOW INIT."""
 

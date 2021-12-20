@@ -4,6 +4,17 @@ import random
 import string
 from datetime import datetime
 
+def getConnector() -> mysql.connector:
+    """Initializes the connector between MySQL and the user interfaces 
+    Returns:
+        mysql.connector: SQL Connection Object 
+    """
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Tamilore",
+        database="bookstore"
+    )
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -40,12 +51,13 @@ def createNewBasket():
 
 #sign up
 #may want to include functions to make sure email & username are always unique
-def signUpFunc(name,email,password,ba,sa):
+def signUpFunc(mydb,name,email,password,ba,sa):
+    mycursor = mydb.cursor()
     #check if they are a current user
-    user = signInFunc(email,password)
+    user = signInFunc(mydb,email,password)
     if user:
         print("ERROR!!! : User already exists")
-        return user
+        return 0
     else:
         basketID = createNewBasket()
         userID = generateRandID('US')
@@ -58,10 +70,11 @@ def signUpFunc(name,email,password,ba,sa):
             return userInfo
         except Exception as e:
             print(e)
-
+#print(signUpFunc("asda","asda","dasda","asda","asd"))
 
 #sign in
-def signInFunc(email,password):
+def signInFunc(mydb,email,password):
+    mycursor = mydb.cursor()
     try:
         query = ("select * from Users "
         "where email = ('%s') and User_Password = ('%s')")
@@ -77,16 +90,14 @@ def signInFunc(email,password):
         print(e)
 
 #owner login
-def ownerLogin():
+def ownerLogin(mydb):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("select * from BookStore")
         ownerInfo = mycursor.fetchall()
         return ownerInfo[0]
     except Exception as e:
         print(e)
-
-# signUpFunc("Edward","edward4@email.com","10000","edward address","edward address")
-# print(ownerLogin())
 
 #
 #
@@ -100,7 +111,8 @@ def ownerLogin():
 #
 #-------displaying info funcitons
 
-def displayUserBasket(basketId):
+def displayUserBasket(mydb,basketId):
+    mycursor = mydb.cursor()
     try:
         sql = ("select * "
                 "from Book_Basket join Book on (Book_Basket.ISBN = Book.ISBN) "
@@ -114,7 +126,8 @@ def displayUserBasket(basketId):
 
         
 #format information for sending
-def getUserOrderHistory(id):
+def getUserOrderHistory(mydb, id):
+    mycursor = mydb.cursor()
     sql = ("select * "
             "from Orders join Book_Orders on (Orders.ID = Book_Orders.ID  and Orders.Order_Number = Book_Orders.Order_Number) join Book on Book.ISBN = Book_Orders.ISBN "
             "where Orders.ID = '%s'")
@@ -131,21 +144,21 @@ def getUserOrderHistory(id):
 #
 #------------searching and adding to basket
 
-def searchForBook(title):
+def searchForBook(mydb,title):
+    mycursor = mydb.cursor()
     try:
         sql = ("select * "
                 "from Book join Book_Bookstore on (Book.ISBN = Book_Bookstore.ISBN) "
                 "where Book.Title like '%s'")
         mycursor.execute(sql % title)
         book = mycursor.fetchall()
-        print("displaying user book search")
-        print(book)
-        for x in book:
-            print(x)
+        return book
     except Exception as e:
         print(e)   
 
-def checkBookInBasket(basketId,isbn):
+#print(searchForBook("Harry potter and the seven witches%"))
+def checkBookInBasket(mydb,basketId,isbn):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("select * from Book_Basket where Basket_ID = '%s' and ISBN = '%s'" % (basketId,isbn))
         book = mycursor.fetchall()
@@ -156,41 +169,62 @@ def checkBookInBasket(basketId,isbn):
     except Exception as e:
         print(e)   
 
+def isBook(mydb,isbn):
+    mycursor = mydb.cursor()
+    try:
+        mycursor.execute("select count(*) from Book_Bookstore where ISBN = '%s'" % isbn)
+        book = mycursor.fetchall()
+        return book[0][0]
+    except Exception as e:
+        print(e)   
 
-def addToBasket(basketId ,isbn, amount):
+
+def addToBasket(mydb,basketId ,isbn, amount):
+    mycursor = mydb.cursor()
     #check if book is aready in basket
-    book = checkBookInBasket(basketId,isbn)
-    if book:
-    #update amount
-        try:
-            mycursor.execute("Update Book_Basket set amount = amount + '%s' where Basket_ID = '%s' and ISBN = '%s'"% (amount,basketId,isbn))
-            mydb.commit()
-            print("increased amount")
-        except Exception as e:
-            print(e) 
+    if isBook(mydb,isbn) > 0:
+        book = checkBookInBasket(mydb,basketId,isbn)
+        if book:
+        #update amount
+            try:
+                mycursor.execute("Update Book_Basket set amount = amount + '%s' where Basket_ID = '%s' and ISBN = '%s'"% (amount,basketId,isbn))
+                mydb.commit()
+                print("increased amount")
+                return 1
+            except Exception as e:
+                print(e) 
+        else:
+        #add book to basket
+            try:
+                mycursor.execute("insert into Book_Basket values ('%s' ,'%s' ,'%s')"% (basketId,isbn,amount))
+                mydb.commit()
+                print(mycursor.rowcount, "new book added to basket created")
+                return 1
+            except Exception as e:
+                print(e)
     else:
-    #add book to basket
-        try:
-            mycursor.execute("insert into Book_Basket values ('%s' ,'%s' ,'%s')"% (basketId,isbn,amount))
-            mydb.commit()
-            print(mycursor.rowcount, "new book added to basket created")
-        except Exception as e:
-            print(e)
+        return 0
 
-def removeFromBasket(basketId, isbn):
+def removeFromBasket(mydb,basketId, isbn):
+    if isBook(mydb,isbn) > 0:
+        mycursor = mydb.cursor()
         try:
             mycursor.execute("delete from Book_basket where Basket_ID = '%s' and ISBN = '%s' "% (basketId,isbn))
             mydb.commit()
+            return 1
             print("removed book from basket")
         except Exception as e:
             print(e)     
+    else:
+        return 0
 
 #
 #---------- buying books
 
 #checks the Book collection if it has the amount of books we need, else reply error
         
-def getValidBooksFromBasket(basketId):
+def getValidBooksFromBasket(mydb,basketId):
+    mycursor = mydb.cursor()
     try:
         
 
@@ -205,9 +239,10 @@ def getValidBooksFromBasket(basketId):
     except Exception as e:
         print(e) 
 
-def buyBooks(id,basketId,sa,ba):
+def buyBooks(mydb,id,basketId,sa,ba):
+    mycursor = mydb.cursor()
     print("buying process starting....................")
-    books = getValidBooksFromBasket(basketId)
+    books = getValidBooksFromBasket(mydb,basketId)
     if books:
         today = datetime.today()
         month = today.month
@@ -215,7 +250,7 @@ def buyBooks(id,basketId,sa,ba):
         newOrderId = generateRandID("OR")
         newTrackingInfo = generateRandID("TR")
         # add new order
-        addNewOrder(id,newOrderId,newTrackingInfo,ba,sa,month,year)
+        addNewOrder(mydb,id,newOrderId,newTrackingInfo,ba,sa,month,year)
         # add to book orders
         for x in books:
             ref = generateRandID("RF")
@@ -223,24 +258,26 @@ def buyBooks(id,basketId,sa,ba):
             bankId = "BN-10000"
             pubAmount = (x[2] * x[3] * x[4])/100
             totalPrice = (x[2] * x[3]) - pubAmount
-            reduceBookStoreAmount(x[0],x[2])
-            addNewBook_Order(id,newOrderId,x[0],totalPrice,x[2])
-            addBankTransfer(ref,month,year,x[1],bankId,storeId,pubAmount)
-            removeFromBasket(basketId,x[0])
+            reduceBookStoreAmount(mydb,x[0],x[2])
+            addNewBook_Order(mydb,id,newOrderId,x[0],totalPrice,x[2])
+            addBankTransfer(mydb,ref,month,year,x[1],bankId,storeId,pubAmount)
+            removeFromBasket(mydb,basketId,x[0])
         print("buying complete")
 
 
 
-def addBankTransfer(referenceNo,month,year,publisherId,bankId,storeId,amount):
+def addBankTransfer(mydb,referenceNo,month,year,publisherId,bankId,storeId,amount):
+    mycursor = mydb.cursor()
     #add ref to bank
-    addToBank(bankId,referenceNo)
+    addToBank(mydb,bankId,referenceNo)
     #add to Publisher bank
-    addToPubBank(bankId,publisherId,referenceNo)
+    addToPubBank(mydb,bankId,publisherId,referenceNo)
     #add to Bookstore bank
-    addToBookBank(storeId,bankId,referenceNo,amount,month,year)
+    addToBookBank(mydb,storeId,bankId,referenceNo,amount,month,year)
 
 
-def addToBank(bankId,referenceNo):
+def addToBank(mydb,bankId,referenceNo):
+    mycursor = mydb.cursor()
     address = "oniru"
     name ="access bank"
     email = "accessbank@email.com"
@@ -254,7 +291,8 @@ def addToBank(bankId,referenceNo):
         print(e) 
     return  0
 
-def addToPubBank(bankId,publisherId,referenceNo):
+def addToPubBank(mydb,bankId,publisherId,referenceNo):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("insert into Publisher_Bank values ('%s', '%s' ,'%s') ;" % (publisherId,bankId,referenceNo))
         mydb.commit()
@@ -263,7 +301,8 @@ def addToPubBank(bankId,publisherId,referenceNo):
         print(e) 
     return  0
 
-def addToBookBank(storeId,bankId,referenceNo,amount,month,year):
+def addToBookBank(mydb,storeId,bankId,referenceNo,amount,month,year):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("insert into Bookstore_Bank values ('%s', '%s', '%s' ,%d ,%d ,%d) ;" % (storeId,bankId,referenceNo,amount,month,year))
         mydb.commit()
@@ -273,7 +312,8 @@ def addToBookBank(storeId,bankId,referenceNo,amount,month,year):
     return  0    
 
 
-def reduceBookStoreAmount(isbn,amount):
+def reduceBookStoreAmount(mydb,isbn,amount):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("Update Book_BookStore set amount = amount - '%s' where ISBN = '%s'"% (amount,isbn))
         mydb.commit()
@@ -281,7 +321,8 @@ def reduceBookStoreAmount(isbn,amount):
     except Exception as e:
         print(e)     
 
-def addNewOrder(id,oNum,tNum,ba,sa,month,year):
+def addNewOrder(mydb,id,oNum,tNum,ba,sa,month,year):
+    mycursor = mydb.cursor()
     #get month and year 
     try:
         mycursor.execute("insert into Orders values ('%s','%s','%s','%s','%s',%d,%d)" % (id,oNum,tNum,ba,sa,month,year))
@@ -291,7 +332,8 @@ def addNewOrder(id,oNum,tNum,ba,sa,month,year):
         print(e)  
 
 
-def addNewBook_Order(id, oId,isbn,price,amount):
+def addNewBook_Order(mydb,id, oId,isbn,price,amount):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("insert into Book_Orders values('%s','%s','%s',%d,%d);" % (id,oId,isbn,price,amount))
         mydb.commit()
@@ -345,8 +387,19 @@ def getSalesPerYear(m1,m2,y1,y2):
     except Exception as e:
         print(e)    
   
+def getTransactionHistory(mydb):
+    mycursor = mydb.cursor()
+    try:
+        mycursor.execute("select Bookstore_Bank.Reference_no, Publisher_ID, month,year,amount,Bookstore_Bank.Bank_ID from Bookstore_Bank join Publisher_Bank on (Bookstore_Bank.Reference_no = Publisher_Bank.Reference_no)")
+        result = mycursor.fetchall()
+        print("Result")
+        print(result)
+        return result
+    except Exception as e:
+        print(e) 
 
-def updateInventory():
+def updateInventory(mydb):
+    mycursor = mydb.cursor()
     try:
         sql = ("select * "
                 "from Book_Bookstore join Book on (Book_Bookstore.ISBN = Book.ISBN)")
@@ -355,42 +408,59 @@ def updateInventory():
         return bookInfo
     except Exception as e:
         print(e)
+def checkExisitingBook(mydb,pId,title,author):
+    mycursor = mydb.cursor()
+    try:
+        sql = ("select count(*) "
+                "from Book_Bookstore join Book on Book.ISBN = Book_Bookstore.ISBN "
+                "where Title = '%s' and Author_name = '%s' and Publisher_ID = '%s'")
+        mycursor.execute(sql % (title,author,pId))
+        bookInfo = mycursor.fetchall()
+        return bookInfo[0][0]
+    except Exception as e:
+        print(e)
 
 #when user adds a totally new book
-def addNewBook(title,pId,genre,author,price,percentage,seriesCode,amount):
+def addNewBook(mydb,title,pId,genre,author,price,percentage,seriesCode,amount):
+    mycursor = mydb.cursor()
     #insert into Book
-    isbn = generateRandID("BK")
-    try:
-        mycursor.execute("insert into Book values ('%s','%s','%s','%s','%s', %d,%d,'%s')"%(isbn,title,pId,genre,author,price,percentage,seriesCode))
-        mydb.commit()
-    except Exception as e:
-        print(e) 
+    if checkExisitingBook(mydb,pId,title,author) == 0:
+        isbn = generateRandID("BK")
+        try:
+            mycursor.execute("insert into Book values ('%s','%s','%s','%s','%s', %d,%d,'%s')"%(isbn,title,pId,genre,author,price,percentage,seriesCode))
+            mydb.commit()
+        except Exception as e:
+            print(e) 
 
-    #insert into Book_Bookstore
-    id = "BS-10000"
-    try:
-        mycursor.execute("insert into Book_Bookstore values ('%s','%s',%d)"%(id,isbn,amount))
-        mydb.commit()
-    except Exception as e:
-        print(e)     
+        #insert into Book_Bookstore
+        id = "BS-10000"
+        try:
+            mycursor.execute("insert into Book_Bookstore values ('%s','%s',%d)"%(id,isbn,amount))
+            mydb.commit()
+        except Exception as e:
+            print(e)     
 
 #when user adds book that already exists
-def addBook(isbn,amount):
+def addBook(mydb,isbn,amount):
+    mycursor = mydb.cursor()
     id = "BS-10000"
     try:
         mycursor.execute("insert into Book_Bookstore values ('%s','%s',%d)"%(id,isbn,amount))
         mydb.commit()
     except Exception as e:
-        print(e)     
+        print(e)
+    
 
-def removeBook(isbn):
+def removeBook(mydb,isbn):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("delete from Book_Bookstore where ISBN = '%s'" % isbn)
         mydb.commit()
     except Exception as e:
         print(e)
 
-def increaseAmount(isbn,amount):
+def increaseAmount(mydb,isbn,amount):
+    mycursor = mydb.cursor()
     try:
         mycursor.execute("Update Book_Bookstore set amount = amount + %d where ISBN = '%s'" % (amount,isbn))
         mydb.commit()
