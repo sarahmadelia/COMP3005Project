@@ -36,3 +36,7 @@ insert into Book_Basket values("BA-10000","BK-10001",3);
 insert into Bank values("BN-10000","RF-10000","access bank","oniru","accessbank@email.com","111-111-1111");
 insert into Publisher_Bank values ("PB-10000","BN-10000","RF-10000");
 insert into Bookstore_Bank values ("BS-10000","BN-10000","RF-10000",100,12,2020);
+create view sales_by_year(order_number,month,year,total_sales) as
+select Orders.Order_Number,Month,Year,sum(Price)
+from Orders join Book_Orders on Orders.Order_number = Book_Orders.Order_number
+group by Orders.Order_Number,Orders.Month,Orders.Year
