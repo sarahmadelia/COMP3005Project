@@ -29,7 +29,6 @@ ISBN - "BK-10000"
 User id - "US-10000"
 Order number -  "OR-10000"
 Tracking number - "TR-10000"
-----------------------
 
 The dummy data inserted is not to replicate a proper simulation, thus if you run some functionality with some dummy data ID's it may give errors. For example things are inserted into book_orders but not inserted in other places thus tracking doesnt work for that dummy data.
 Thus to test full simulation it is better to add new data via the GUI. you can use the inserted books also those are fine.
