@@ -7,15 +7,28 @@ HEIGHT = 700
 
 
 def showUI(window, controller):
+    def user_login():
+        controller.user_login(user_email_input_area.get(),
+                                user_password_entry_area.get())
+
+    def user_signUp():
+        controller.user_signUp(new_user_ID_entry_area.get(),
+                                new_user_password_entry_area.get(),
+                                new_user_email_entry.get(),
+                                new_user_shipping_entry.get(),
+                                new_user_billing_entry.get())
+    def owner_login():
+        controller.ownerSignIn()
+
     """ User Sign-In lets the user sign in with ID and password"""
     display_message1 = Label(
         window, text="Are you a returning user? Please sign in here! ")
     display_message1.place(x=40, y=40)
 
-    user_ID = Label(window, text="User ID")
-    user_ID.place(x=40, y=60)
-    user_ID_entry_area = Entry(window, width=30)
-    user_ID_entry_area.place(x=110, y=60)
+    user_email = Label(window, text="User Email")
+    user_email.place(x=40, y=60)
+    user_email_input_area = Entry(window, width=30)
+    user_email_input_area.place(x=110, y=60)
 
     user_password = Label(window, text="Password")
     user_password.place(x=40, y=100)
@@ -23,7 +36,7 @@ def showUI(window, controller):
     user_password_entry_area.place(x=110, y=100)
 
     signin_button = Button(window, text="Sign In",
-                           command=controller.show_User)
+                           command=user_login)
     signin_button.place(x=40, y=130)
 
     """User Sign-Up lets the user sign up with their username, email, password, Billing Address and Shipping Address"""
@@ -58,7 +71,7 @@ def showUI(window, controller):
     new_user_billing_entry. place(x=150, y=450)
 
     signup_button = Button(window, text="Sign Up",
-                           command=controller.show_User)
+                           command=user_signUp)
     signup_button.place(x=40, y=520)
 
     """ Bookstore owner sign in section """
@@ -78,7 +91,7 @@ def showUI(window, controller):
     # owner_password_entry_area.place(x=810, y=100)
 
     signin_button = Button(window, text="   Sign In   ",
-                           command=controller.show_Owner)
+                           command=owner_login)
     signin_button.place(x=700, y=60)
 
     window.title("LOGIN PAGE")

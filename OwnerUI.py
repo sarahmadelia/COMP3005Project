@@ -2,34 +2,66 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter import *
 import data
-#from main import Controller
 
-WIDTH = 1200
-HEIGHT = 1000
+WIDTH = 2000
+HEIGHT = 1500
 
 
 def showUI(window, controller):
-    def print_text():
-        controller.print_test()
-        # this prints the content of the search entry box
-        print(search_entry.get())
+    def user_search():
+        result = controller.user_Search(search_entry.get())
+        #clear box
+        lb1.delete(0,END)
+        lb1.insert(END,*result)
+    def resetInfo():
+        lb1.delete(0,END)
+        books = controller.showInventory()
+        lb1.insert(END, *books)
+        
+        transfer.delete(0,END)
+        banktransfers = controller.getBankHistory()
+        transfer.insert(END, *banktransfers)
 
+    def logout():
+            controller.logout()
+    def addBook():
+        controller.addBook(add_entry.get(),
+                            int(add_entry2.get()))
+        resetInfo()
+    def removeBook():
+        controller.removeBook(rem_entry.get())
+        resetInfo()
+    def addNewBook():
+        controller.addNewBook(title_entry.get(),
+                                publisher_entry.get(),
+                                genre_entry.get(),
+                                author_entry.get(),
+                                int(price_entry.get()),
+                                int(percent_entry.get()),
+                                code_entry.get(),
+                                int(amount_entry.get()))
+        resetInfo()
+    def increaseBook():
+        controller.increaseBook(inc_entry.get(),
+                                int(inc_entry2.get()))
+        resetInfo()
     """Search Inventory"""
 
-    search_lbl = Label(window, text='Search')
+    search_lbl = Label(window, text='WELCOME TO ADMIN PAGE')
     search_lbl.grid(column=0, row=1)
 
     search_entry = Entry(window, width=50)
     search_entry.grid(column=1, row=1)
 
-    search_button = Button(window, text="Search").grid(column=2, row=1)
+    search_button = Button(window, text="Search", command=user_search)
+    search_button.grid(column=2, row=1)
 
     """Search Results"""
 
-    lb1 = Listbox(window, height=25, width=60)
+    lb1 = Listbox(window, height=25, width=110)
 
     # grabs the ISBN and name  of all the bookstores from the sql database
-    books = controller.get_bookstore_books()
+    books = controller.showInventory()
     # inputs all the names at the end of listbox
     lb1.insert(END, *books)
 
@@ -39,7 +71,7 @@ def showUI(window, controller):
 
     """Adding a book"""
 
-    addnewBook = Button(window, text="Add New book")
+    addnewBook = Button(window, text="Add New book",command=addNewBook)
     addnewBook.grid(column=0, row=4)
 
     title_entry = Entry(window, width=20)
@@ -54,9 +86,9 @@ def showUI(window, controller):
     genre_entry.grid(column=0, row=7)
     genre_entry.insert(0, "Genre")
 
-    amount_entry = Entry(window, width=20)
-    amount_entry.grid(column=0, row=8)
-    amount_entry.insert(0, "Amount")
+    price_entry = Entry(window, width=20)
+    price_entry.grid(column=0, row=8)
+    price_entry.insert(0, "Price")
 
     publisher_entry = Entry(window, width=20)
     publisher_entry.grid(column=0, row=9)
@@ -70,7 +102,11 @@ def showUI(window, controller):
     code_entry.grid(column=0, row=11)
     code_entry.insert(0, "Series Code")
 
-    addBook = Button(window, text="Add book")
+    amount_entry = Entry(window, width=20)
+    amount_entry.grid(column=0, row=12)
+    amount_entry.insert(0, "Amount")
+
+    addBook = Button(window, text="Add book",command=addBook)
     addBook.grid(column=1, row=4)
 
     add_entry = Entry(window, width=20)
@@ -81,14 +117,14 @@ def showUI(window, controller):
     add_entry2.grid(column=1, row=6)
     add_entry2.insert(0, "Amount")
 
-    removeBook = Button(window, text="Remove book")
+    removeBook = Button(window, text="Remove book",command=removeBook)
     removeBook.grid(column=2, row=4)
 
     rem_entry = Entry(window, width=19)
     rem_entry.grid(column=2, row=5)
     rem_entry.insert(0, "Amount")
 
-    increase = Button(window, text="Increase")
+    increase = Button(window, text="Increase",command=increaseBook)
     increase.grid(column=3, row=4)
 
     inc_entry = Entry(window, width=20)
@@ -144,7 +180,7 @@ def showUI(window, controller):
     report_btn.grid(column=7, row=3)
 
     """Log out """
-    logout = Button(window, text="   Logout   ")
+    logout = Button(window, text="   Logout   ",command=logout)
     logout.grid(column=6, row=0)
 
     """Order transfer history """
@@ -153,7 +189,7 @@ def showUI(window, controller):
     transfer_lbl.grid(column=4, row=4)
 
     transfer = Listbox(window, height=10, width=60)
-    banktransfers = controller.get_bank_transfers()
+    banktransfers = controller.getBankHistory()
     transfer.insert(END, *banktransfers)
     transfer.grid(column=4, row=5, columnspan=3)
 
