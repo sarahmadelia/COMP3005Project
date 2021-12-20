@@ -147,12 +147,14 @@ def showUI(window, controller):
 
     mo_fr_entry = Entry(window, width=20)
     mo_fr_entry.grid(column=4, row=2)
+    mo_fr_entry.insert(0,"start month")
 
     year_fr = Label(window, text="Year: ")
     year_fr.grid(column=3, row=3)
 
     yr_fr_entry = Entry(window, width=20)
     yr_fr_entry.grid(column=4, row=3)
+    yr_fr_entry.insert(0,"start year")
 
     to_lbl = Label(window, text="To: ")
     to_lbl.grid(column=5, row=1)
@@ -162,13 +164,14 @@ def showUI(window, controller):
 
     mo_to_entry = Entry(window, width=20)
     mo_to_entry.grid(column=6, row=2)
+    mo_to_entry.insert(0,"end month")
 
     year_to = Label(window, text="Year: ")
     year_to.grid(column=5, row=3)
 
     yr_to_entry = Entry(window, width=20)
     yr_to_entry.grid(column=6, row=3)
-    #yr_to_entry.insert("End Year")
+    yr_to_entry.insert(0,"end year")
 
     rep_type = Label(window, text="Report type: ")
     rep_type.grid(column=4, row=0)
@@ -178,6 +181,13 @@ def showUI(window, controller):
 
     report_btn = Button(window, text="Generate")
     report_btn.grid(column=7, row=3)
+
+    report_label= Label(window, text="Generated report")
+    report_label.grid(column=7, row=4) 
+
+    gen_report= Listbox(window, height =10, width = 60)
+    gen_report.grid(column=7, row=5, columnspan= 3) 
+
 
     """Log out """
     logout = Button(window, text="   Logout   ",command=logout)

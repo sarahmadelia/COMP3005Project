@@ -138,7 +138,11 @@ def showUI(window, controller: Controller):
     track_button = Button(window, text="Track")
     track_button.grid(column=2, row=5)
 
-    #welcome user
+
+
+    trackstatus= Listbox(window, width= 70, height =50)
+    trackstatus.grid(column=1, row=6, columnspan= 3) 
+
 
     """WINDOW INIT."""
 
