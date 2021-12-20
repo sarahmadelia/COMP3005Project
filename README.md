@@ -16,3 +16,27 @@ This application was developped within MySQL (in SQL) and VSCode (in Python)
    IF acting as an owner, select the sign in button
    IF acting as a userr, sign up with log-in information and then use this log-in information to sign in (email and password)
 6. When finished with session, logout using the log-out button
+
+Instruction on formatting of datatbase:
+
+Unique iD's fromat examples
+BasketId - "BA-10000"
+Bookstore id - "BS-10000"
+Phone number - "111-111-1111"
+email - "lookinnabook@email.com"
+Publisher ID - "PB-10000", only one publisher id added as of now so this is the id you need to use for adding more books
+ISBN - "BK-10000"
+User id - "US-10000"
+Order number -  "OR-10000"
+Tracking number - "TR-10000"
+----------------------
+
+The dummy data inserted is not to replicate a proper simulation, thus if you run some functionality with some dummy data ID's it may give errors. For example things are inserted into book_orders but not inserted in other places thus tracking doesnt work for that dummy data.
+Thus to test full simulation it is better to add new data via the GUI. you can use the inserted books also those are fine.
+
+
+Format of GUI results
+
+Search results are formatted as : (ISBN, book title, author , genre, price, amount left in inventory, Publisher id)
+Basket results are formatted as: (ISBN, publisher id, book title , amount in basket, price , genre, author)
+order history results are formatted as :(ID, Order number, tracking id, book title, amount , price , address month year)
