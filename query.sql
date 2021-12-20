@@ -51,7 +51,7 @@ select Book_Basket.ISBN, Book.Publisher_ID,Book_Basket.Amount, Book.Selling_pric
 from Book_Basket join Book_Bookstore on (Book_Basket.ISBN = Book_Bookstore.ISBN ) join Book on (Book.ISBN = Book_Bookstore.ISBN)
 where Book_Basket.Basket_ID = "BA-10000" and Book_Basket.Amount <= Book_Bookstore.Amount
 --------------------------------------------------------------------------------------------
-select * 
+select Book.ISBN, Publisher_ID, Title, Book_Basket.Amount, Selling_Price, Genre, Author_Name
 from Book_Basket join Book on (Book_Basket.ISBN = Book.ISBN)
 where Book_Basket.Basket_ID = "BA-10000"
 ----------------------------------------------------------------------------

@@ -45,6 +45,15 @@ def showUI(window, controller):
         controller.increaseBook(inc_entry.get(),
                                 int(inc_entry2.get()))
         resetInfo()
+    def report():
+        print("..............................................")
+        result = controller.getReport(int(mo_fr_entry.get()),
+                                    int(mo_to_entry.get()),
+                                    int(yr_fr_entry.get()),
+                                    int(yr_to_entry.get()))
+        gen_report.delete(0,END)
+        gen_report.insert(END,*result)
+    
     """Search Inventory"""
 
     search_lbl = Label(window, text='WELCOME TO ADMIN PAGE')
@@ -106,8 +115,8 @@ def showUI(window, controller):
     amount_entry.grid(column=0, row=12)
     amount_entry.insert(0, "Amount")
 
-    addBook = Button(window, text="Add book",command=addBook)
-    addBook.grid(column=1, row=4)
+    addBook_lbl = Button(window, text="Add book",command=addBook)
+    addBook_lbl.grid(column=1, row=4)
 
     add_entry = Entry(window, width=20)
     add_entry.grid(column=1, row=5)
@@ -117,8 +126,8 @@ def showUI(window, controller):
     add_entry2.grid(column=1, row=6)
     add_entry2.insert(0, "Amount")
 
-    removeBook = Button(window, text="Remove book",command=removeBook)
-    removeBook.grid(column=2, row=4)
+    removeBook_lbl = Button(window, text="Remove book",command=removeBook)
+    removeBook_lbl.grid(column=2, row=4)
 
     rem_entry = Entry(window, width=19)
     rem_entry.grid(column=2, row=5)
@@ -136,8 +145,8 @@ def showUI(window, controller):
     inc_entry2.insert(0, "Amount")
 
     """ Generate Report"""
-    report = Label(window, text="Request Report:")
-    report.grid(column=3, row=0)
+    report_lbl = Label(window, text="Request Report:")
+    report_lbl.grid(column=3, row=0)
 
     from_lbl = Label(window, text="From: ")
     from_lbl.grid(column=3, row=1)
@@ -179,7 +188,7 @@ def showUI(window, controller):
         window, values=["Sales"])
     reporttype_entry.grid(column=5, row=0)
 
-    report_btn = Button(window, text="Generate")
+    report_btn = Button(window, text="Generate", command=report)
     report_btn.grid(column=7, row=3)
 
     report_label= Label(window, text="Generated report")

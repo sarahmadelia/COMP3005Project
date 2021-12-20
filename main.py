@@ -172,8 +172,32 @@ class Controller:
             print("Error with history")
             return[]
 
-    # def getReport():
+    def getReport(self,m1,m2,y1,y2):
+        print("generating report")
+        result = data.getSalesPerYear(self.connector,m1,m2,y1,y2)
+        if result:
+            format = ["Total sales made from "+str(m1)+" : "+str(y1)+" to "+str(m2)+" : "+str(y2)+"   =  $" + str(result)]
+            print(format)
+            return format
+        else:
+            return "invalid selection"
 
+    def track(self,tID):
+        location = "Location : Bookstore Warehouse"
+        status = "Order Status : In Transit"
+        result = data.track(self.connector,self.activeUser[0],tID)
+        if result:
+            print("info")
+            print(result)
+            format = []
+            format.append(result[0])
+            format.append([location,status])
+            return format
+        else:
+            print("Error with history")
+            return[]
+
+        
 
 
 

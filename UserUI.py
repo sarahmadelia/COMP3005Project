@@ -46,7 +46,11 @@ def showUI(window, controller: Controller):
         basket_lbx.delete(0,END)
         basket = controller.fillBasket()
         basket_lbx.insert(END, *basket)
-
+    def track():
+        results = controller.track(track_entry.get())
+        trackstatus.delete(0,END)
+        trackstatus.insert(END,*results)
+    
     """Search Books"""
 
     welcome_lbl = Label(window, text="Welcome User    :"+controller.activeUser[2])
@@ -135,7 +139,7 @@ def showUI(window, controller: Controller):
     track_label. grid(column=0, row=5)
     track_entry = Entry(window, width=50)
     track_entry.grid(column=1, row=5)
-    track_button = Button(window, text="Track")
+    track_button = Button(window, text="Track",command=track)
     track_button.grid(column=2, row=5)
 
 

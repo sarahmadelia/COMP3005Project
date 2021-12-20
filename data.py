@@ -114,7 +114,7 @@ def ownerLogin(mydb):
 def displayUserBasket(mydb,basketId):
     mycursor = mydb.cursor()
     try:
-        sql = ("select * "
+        sql = ("select Book.ISBN, Publisher_ID, Title, Book_Basket.Amount, Selling_Price, Genre, Author_Name "
                 "from Book_Basket join Book on (Book_Basket.ISBN = Book.ISBN) "
                 "where Book_Basket.Basket_ID = '%s'")
         mycursor.execute(sql % basketId)
@@ -128,7 +128,7 @@ def displayUserBasket(mydb,basketId):
 #format information for sending
 def getUserOrderHistory(mydb, id):
     mycursor = mydb.cursor()
-    sql = ("select * "
+    sql = ("select Orders.ID, Orders.Order_Number, Tracking_Number, Title,Amount,Price,Shipping_address,month,year "
             "from Orders join Book_Orders on (Orders.ID = Book_Orders.ID  and Orders.Order_Number = Book_Orders.Order_Number) join Book on Book.ISBN = Book_Orders.ISBN "
             "where Orders.ID = '%s'")
     try:
@@ -139,7 +139,19 @@ def getUserOrderHistory(mydb, id):
     except Exception as e:
         print(e)
 
-
+def track(mydb,id,tid):
+    mycursor = mydb.cursor()
+    sql = ("select Orders.ID, Orders.Order_Number, Title,Price,Amount,Shipping_address,month,year "
+            "from Orders join Book_Orders on (Orders.ID = Book_Orders.ID  and Orders.Order_Number = Book_Orders.Order_Number) join Book on Book.ISBN = Book_Orders.ISBN "
+            "where Orders.ID = '%s' and Orders.Tracking_Number = '%s'")
+    try:
+        mycursor.execute(sql % (id,tid))
+        info = mycursor.fetchall()
+        print("tracking....")
+        print(info)
+        return info
+    except Exception as e:
+        print(e)
 #
 #
 #------------searching and adding to basket
@@ -218,10 +230,7 @@ def removeFromBasket(mydb,basketId, isbn):
     else:
         return 0
 
-#
-#---------- buying books
-
-#checks the Book collection if it has the amount of books we need, else reply error
+#def trackStatus()
         
 def getValidBooksFromBasket(mydb,basketId):
     mycursor = mydb.cursor()
@@ -376,7 +385,8 @@ def createTrigger():
     except Exception as e:
         print(e)  
 
-def getSalesPerYear(m1,m2,y1,y2):
+def getSalesPerYear(mydb,m1,m2,y1,y2):
+    mycursor = mydb.cursor()
     sum = ("select sum(total_sales) "
         "from sales_by_year "
         "where month >= %d and year >= %d and month <= %d and year <= %d")
@@ -401,7 +411,7 @@ def getTransactionHistory(mydb):
 def updateInventory(mydb):
     mycursor = mydb.cursor()
     try:
-        sql = ("select * "
+        sql = ("select Book.ISBN, Title, Author_Name, Genre, Selling_Price, Book_Bookstore.Amount ,Publisher_ID "
                 "from Book_Bookstore join Book on (Book_Bookstore.ISBN = Book.ISBN)")
         mycursor.execute(sql)
         bookInfo = mycursor.fetchall()
